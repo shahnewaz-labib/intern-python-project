@@ -21,9 +21,6 @@ def login() -> Tuple[str, str]:
     username = input("Username: ")
     password = getpass()
 
-    username = "elonmusk"
-    password = "nerd"
-
     print_warning("Logging in ...")
 
     try:
@@ -37,7 +34,9 @@ def login() -> Tuple[str, str]:
             print_success("Login successful\n")
             return response["body"]["access_token"], response["body"]["refresh_token"]
         else:
-            print_error(f"Login failed: {response.get('message', 'Unknown error')}")
+            print_error(
+                f"Login failed: {response.get('body').get('detail', 'Unknown error')}"
+            )
             exit(1)
     except Exception as e:
         print_error(f"An error occurred during login: {e}")

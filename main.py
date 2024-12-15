@@ -12,8 +12,6 @@ from util import (
     print_warning,
 )
 
-API_BASE = "http://localhost:8000/api"
-
 
 def token_refresh_decorator(func):
     def wrapper(self, *args, **kwargs):
@@ -32,6 +30,7 @@ def token_refresh_decorator(func):
 
 class TwitterBot:
     def __init__(self):
+        self.api_base = "http://localhost:8000/api"
         self.username = None
         self.password = None
         self.access_token = None
@@ -53,7 +52,7 @@ class TwitterBot:
             login_data = {"username": username, "password": password}
             headers = {"Content-Type": "application/json"}
             response = NetworkRequest.post(
-                f"{API_BASE}/auth", data=login_data, headers=headers
+                f"{self.api_base}/auth", data=login_data, headers=headers
             )
 
             if response["code"] == 200:
@@ -73,7 +72,7 @@ class TwitterBot:
     def refresh_tokens(self) -> None:
         try:
             refresh_result = NetworkRequest.post(
-                f"{API_BASE}/auth/token",
+                f"{self.api_base}/auth/token",
                 data={"refresh_token": self.refresh_token},
                 headers=self.headers,
             )
@@ -101,7 +100,7 @@ class TwitterBot:
     def post_tweet(self, tweet_data):
         try:
             post_result = NetworkRequest.post(
-                f"{API_BASE}/tweets", data=tweet_data, headers=self.headers
+                f"{self.api_base}/tweets", data=tweet_data, headers=self.headers
             )
             return post_result
 
@@ -112,7 +111,9 @@ class TwitterBot:
     @token_refresh_decorator
     def check_recent_tweets(self):
         print_info("checking recent tweets ...\n")
-        tweets_result = NetworkRequest.get(f"{API_BASE}/tweets", headers=self.headers)
+        tweets_result = NetworkRequest.get(
+            f"{self.api_base}/tweets", headers=self.headers
+        )
         return tweets_result
 
     def run(self) -> None:

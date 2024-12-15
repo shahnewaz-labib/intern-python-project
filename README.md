@@ -1,5 +1,9 @@
 # Mini Project
 
+### Final Output
+![Final Output](final-log.png?raw=true "Final Output")
+
+
 TODO:
 - Make the following utilities
     - a class having GET, POST, PUT, DELETE methods to make corresponding network requests to a given url
